@@ -1,8 +1,8 @@
 import { toaster } from "@/components/ui/toaster";
 import { ENDPOINTS } from "./constants";
-import { Pokemon, PokemonAction } from "@/types/pokemon";
+import { Pokemon, PokemonAction, PokemonDetailsAction } from "@/types/pokemon";
 
-export async function fetchPokemonData(limit: number, offset: number, dispatch: (action: PokemonAction) => void, searchTerm: string) {
+export async function fetchPokemonData(limit: number, offset: number, dispatch: React.Dispatch<PokemonAction>, searchTerm: string) {
     dispatch({ type: 'FETCH_START' });
     try {
 
@@ -12,14 +12,11 @@ export async function fetchPokemonData(limit: number, offset: number, dispatch: 
             );
 
             if (!response.ok) {
-                console.log('masuk sini')
                 dispatch({ type: 'FETCH_FAILURE' });
                 return null;
             }
 
             const data = await response.json();
-
-            console.log('===>search', data)
 
             if (response.ok && data) {
                 dispatch({ type: 'FETCH_SUCCESS', payload: data });
@@ -32,7 +29,6 @@ export async function fetchPokemonData(limit: number, offset: number, dispatch: 
             );
 
             if (!response.ok) {
-                console.log('masuk sini')
                 dispatch({ type: 'FETCH_FAILURE' });
                 return null;
             }
@@ -54,7 +50,7 @@ export async function fetchPokemonData(limit: number, offset: number, dispatch: 
 
 };
 
-export async function fetchPokemonDetailsAndDispatch(pokemon: Pokemon, dispatch: (action: PokemonAction) => void) {
+export async function fetchPokemonDetailsAndDispatch(pokemon: Pokemon, dispatch: React.Dispatch<PokemonAction>) {
     try {
         const response = await fetch(pokemon.url);
         const details = await response.json();
@@ -73,6 +69,48 @@ export async function fetchPokemonDetailsAndDispatch(pokemon: Pokemon, dispatch:
     } catch (error) {
         toaster.create({
             title: `Error fetching details for ${pokemon.name}: ${error}`,
+            type: 'error',
+        })
+    }
+};
+
+export async function fetchPokemonDetailsWithParams(
+    pokemonName: string,
+    dispatch: React.Dispatch<PokemonDetailsAction>
+) {
+    if (!pokemonName) return;
+
+    dispatch({ type: "FETCH_START" });
+
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${ENDPOINTS.POKEMON}/${pokemonName.toLowerCase()}`);
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                dispatch({ type: "FETCH_FAILURE", payload: "Pokemon not found." });
+            } else {
+                dispatch({ type: "FETCH_FAILURE", payload: "An error occurred while fetching data." });
+            }
+            return;
+        }
+
+        const pokemon = await response.json();
+        if (pokemon && pokemon.sprites) {
+            const typeNames = pokemon.types.map((type: { type: { name: string } }) => type.type.name);
+
+            dispatch({
+                type: "FETCH_SUCCESS",
+                payload: {
+                    ...pokemon,
+                    types: typeNames,
+                    officialArtworkUrl: pokemon.sprites.other['official-artwork'].front_default,
+                }
+            });
+        }
+    } catch (error) {
+        dispatch({ type: "FETCH_FAILURE", payload: "An error occurred while fetching data." });
+        toaster.create({
+            title: `Error fetching details with params: ${error}`,
             type: 'error',
         })
     }

@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation"
 export default function BreadcrumbCustom() {
     const paths = usePathname();
     const pathNames = paths.split('/').filter(path => path);
-    console.log('pathName', pathNames)
     return (
         <Breadcrumb.Root>
             <Breadcrumb.List>
@@ -21,7 +20,7 @@ export default function BreadcrumbCustom() {
                     return (
                         <>
                             <Breadcrumb.Item key={`pokemon-${link}`}>
-                                {!isLastIndex && <Breadcrumb.Link href={link} as={Link}>{link}</Breadcrumb.Link>}
+                                {!isLastIndex && <Breadcrumb.CurrentLink>{link}</Breadcrumb.CurrentLink>}
                                 {isLastIndex && <Breadcrumb.CurrentLink>{link}</Breadcrumb.CurrentLink>}
                             </Breadcrumb.Item>
                             {!isLastIndex && <Breadcrumb.Separator />}

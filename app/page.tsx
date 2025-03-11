@@ -1,14 +1,15 @@
 "use client"
 
 import HeaderBox from "@/components/header-box";
-import { Button, Grid, GridItem, Group, IconButton, Input, Popover, Portal, Stack, Text, VStack } from "@chakra-ui/react";
+import { Button, CloseButton, Drawer, Grid, GridItem, Group, IconButton, Input, Portal, RadioGroup, Stack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useReducer } from "react";
-import { RiArrowRightLine, RiMailLine } from "react-icons/ri";
 import Loading from "./loading";
 import { LuSearch } from "react-icons/lu";
 import { Pokemon, PokemonAction, PokemonState } from "@/types/pokemon";
 import { fetchPokemonData, fetchPokemonDetailsAndDispatch } from "@/utils/pokemon";
 import PokemonList from "@/components/pokemon-list";
+import { POKEMON_TYPE_LABEL } from "@/utils/constants";
+import Image from "next/image";
 
 // Initial State and Reducer
 const initialState: PokemonState = {
@@ -43,10 +44,16 @@ function pokemonReducer(state: PokemonState, action: PokemonAction): PokemonStat
     case 'SET_POKEMON_DETAILS':
       return {
         ...state,
-        pokemonList: state.pokemonList.map((pokemon: Pokemon) =>
-          pokemon.name === action.payload.name
-            ? { ...pokemon, officialArtworkUrl: action.payload.officialArtworkUrl, frontDefaultUrl: action.payload.frontDefaultUrl, types: action.payload.types }
-            : pokemon
+        pokemonList: 
+          state.pokemonList.map((pokemon: Pokemon) =>
+            pokemon.name === action.payload.name
+              ? { 
+                  ...pokemon,
+                  officialArtworkUrl: action.payload.officialArtworkUrl,
+                  frontDefaultUrl: action.payload.frontDefaultUrl,
+                  types: action.payload.types
+                }
+              : pokemon
         ),
       };
     case 'SET_LOCAL_SEARCH_TERM':
@@ -73,13 +80,11 @@ export default function Home() {
     localSearchTerm,
     searchTerm,
     isPokeTypeModalOpen,
-    isPokeGenerationModalOpen,
   } = state;
 
   useEffect(() => {
     async function fetchData() {
       const offset = currentPage * limit;
-      console.log(offset)
       const results = await fetchPokemonData(limit, offset, dispatch, searchTerm);
 
       if (results) {
@@ -119,29 +124,56 @@ export default function Home() {
             </Group>
           </GridItem>
           <GridItem colSpan={2} rowStart={{ base: 2, xl: 0 }}>
-            <Popover.Root
-              open={isPokeTypeModalOpen}
+            <Drawer.Root open={isPokeTypeModalOpen}
               onOpenChange={(e) => dispatch({ type: 'SET_OPEN_POKE_TYPE_MODAL', payload: e.open })}>
-              <Popover.Trigger asChild>
+              <Drawer.Trigger asChild>
                 <Button background="yellow.500" variant="solid" width="full">
-                  <RiMailLine /> Email
+                  Pokemon Type
                 </Button>
-              </Popover.Trigger>
+              </Drawer.Trigger>
               <Portal>
-                <Popover.Positioner>
-                  <Popover.Content width="full">
-                    <Popover.Arrow />
-                    <Popover.Body>
-                      This is a popover with the same width as the trigger button
-                    </Popover.Body>
-                  </Popover.Content>
-                </Popover.Positioner>
+                <Drawer.Backdrop />
+                <Drawer.Positioner>
+                  <Drawer.Content>
+                    <Drawer.Header>
+                      <Drawer.Title>Please select pokemon type</Drawer.Title>
+                    </Drawer.Header>
+                    <Drawer.Body>
+                      <RadioGroup.Root>
+                        <Stack gap="6">
+                          {POKEMON_TYPE_LABEL.map((type) => (
+                            <RadioGroup.Item key={`pokemon-type-${type.label}`} value={type.label}>
+                              <RadioGroup.ItemHiddenInput />
+                              <RadioGroup.ItemIndicator />
+                              <RadioGroup.ItemText>
+                                <Image
+                                  src={type.icon}
+                                  alt={`Icon ${type.label}`}
+                                  width={100}
+                                  height={100}
+                                  loading="lazy"
+                                />
+                              </RadioGroup.ItemText>
+                            </RadioGroup.Item>
+                          ))}
+                        </Stack>
+                      </RadioGroup.Root>
+                    </Drawer.Body>
+                    <Drawer.Footer>
+                      <Button variant="outline" onClick={() => dispatch({ type: 'SET_OPEN_POKE_TYPE_MODAL', payload: false })}>Cancel</Button>
+                      <Button>Save</Button>
+                    </Drawer.Footer>
+                    <Drawer.CloseTrigger asChild>
+                      <CloseButton size="sm" />
+                    </Drawer.CloseTrigger>
+                  </Drawer.Content>
+                </Drawer.Positioner>
               </Portal>
-            </Popover.Root>
+            </Drawer.Root>
           </GridItem>
           <GridItem colSpan={2} rowStart={{ base: 2, xl: 0 }}>
-            <Button colorPalette="teal" variant="outline" width="full">
-              Call us <RiArrowRightLine />
+            <Button borderColor="yellow.500" variant="outline" width="full">
+              Pokemon Generation
             </Button>
           </GridItem>
         </Grid>

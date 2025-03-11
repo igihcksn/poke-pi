@@ -44,3 +44,24 @@ export const POKEMON_TYPE_ICON = {
     [POKEMON_TYPE.STEEL]: "/icons/stell.png",
     [POKEMON_TYPE.WATER]: "/icons/water.png",
 };
+
+export const POKEMON_TYPE_LABEL = [
+    { label: 'Bug', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.BUG] },
+    { label: 'Dark', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.DARK] },
+    { label: 'Dragon', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.DRAGON] },
+    { label: 'Electric', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.ELECTRIC] },
+    { label: 'Fairy', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.FAIRY] },
+    { label: 'Fighting', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.FIGHTING] },
+    { label: 'Fire', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.FIRE] },
+    { label: 'Flying', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.FLYING] },
+    { label: 'Ghost', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.GHOST] },
+    { label: 'Grass', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.GRASS] },
+    { label: 'Ground', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.GROUND] },
+    { label: 'Ice', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.ICE] },
+    { label: 'Normal', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.NORMAL] },
+    { label: 'Poison', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.POISON] },
+    { label: 'Psychic', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.PSYCHIC] },
+    { label: 'Rock', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.ROCK] },
+    { label: 'Steel', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.STEEL] },
+    { label: 'Water', icon: POKEMON_TYPE_ICON[POKEMON_TYPE.WATER] },
+];
