@@ -1,0 +1,38 @@
+export interface Pokemon {
+    name: string;
+    url: string;
+    officialArtworkUrl?: string;
+    frontDefaultUrl?: string;
+    types?: string[];
+};
+
+export interface PokemonListResponse {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: Pokemon[];
+};
+
+export interface PokemonState {
+    pokemonList: Pokemon[];
+    currentPage: number;
+    limit: number;
+    totalCount: number;
+    loading: boolean;
+    searchTerm: string;
+    localSearchTerm: string;
+    isPokeTypeModalOpen: boolean;
+    isPokeGenerationModalOpen: boolean;
+};
+
+export type PokemonAction =
+    | { type: 'FETCH_START' }
+    | { type: 'FETCH_SUCCESS'; payload: PokemonListResponse }
+    | { type: 'FETCH_FAILURE' }
+    | { type: 'SET_CURRENT_PAGE'; payload: number }
+    | { type: 'SET_LIMIT'; payload: number }
+    | { type: 'SET_POKEMON_DETAILS'; payload: { name: string; officialArtworkUrl: string; frontDefaultUrl: string; types: string[] } }
+    | { type: 'SET_LOCAL_SEARCH_TERM'; payload: string }
+    | { type: 'SET_SEARCH_TERM'; payload: string }
+    | { type: 'SET_OPEN_POKE_TYPE_MODAL'; payload: boolean }
+    | { type: 'SET_OPEN_POKE_GENERATION_MODAL'; payload: boolean };
