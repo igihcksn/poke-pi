@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Poke Pi
 
-## Getting Started
+A simple Pokémon Dex app built with Next.js, allowing users to browse and search Pokémon.
 
-First, run the development server:
+### Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This is documentation from exploration project, Hope can running well either in local and production link.
+
+Install the dependencies and devDependencies and start the server.
+
+```sh
+$ yarn install
+$ yarn run dev
+```
+## How to set up your local environment
+
+#### 1. Clone App
+
+- Make a new folder and open the terminal there.
+- Write the following command and press enter.
+
+```
+  $ git clone https://github.com/igihcksn/poke-pi.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### 2. Install Yarn
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Move inside the cloned folder.
+- Write the following command and press enter to download all required node modules.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+$ yarn install
+```
 
-## Learn More
+#### 3. Run Locally
 
-To learn more about Next.js, take a look at the following resources:
+- While you are still inside the cloned folder, write the following command to run the website locally.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+  $ yarn run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment Options
 
-## Deploy on Vercel
+ 1. PAAS
+	**Vercel**, Native support for Next.js, optimized for its features, Easy setup and deployment with Git integration (Can be more expensive for high-traffic or complex applications compared to self-hosting.).
+	**Netlify**, Simple and easy deployment with Git integration, Good for static site generation (SSG) and server-side rendering (SSR) with some configuration (Configuration can be a bit more involved than Vercel for some Next.js features).
+ 2. Self Hosting
+Like the others framework we also able to deploy this APP privately with maximum control over  the infrastructure but with significant setup and maintenance overhead.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Monitoring Tools Options
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+We can use common tools like **Google Analytics** and **Vercel Analytics** to monitor our applications. If privacy is a concern, open-source options like **OpenTelemetry** and **Umami** are good alternatives.
+
+## Libraries
+
+
+| Package        |Description                          |
+|----------------|-------------------------------|
+|@chakra-ui/react|Accessible React components for building high-quality web apps and design systems.            |
+|@emotion/react|Emotion is a library designed for writing css styles with JavaScript.            |
+
+## Framework
+
+
+| Package        |Description                          |
+|----------------|-------------------------------|
+|Next JS|designed to simplify building interactive web applications using React.            |
