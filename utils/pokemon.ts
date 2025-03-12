@@ -22,11 +22,24 @@ export async function fetchPokemonData({
                 return null;
             }
 
-            const data = await response.json();
+            const details = await response.json();
 
-            if (response.ok && data) {
-                dispatch({ type: 'FETCH_SUCCESS', payload: data });
-                return data.results;
+            if (response.ok && details) {
+                const typeNames = details.types.map((type: { type: { name: string } }) => type.type.name);
+                const response = {
+                    name: details.name,
+                    url: `${process.env.NEXT_PUBLIC_API_URL}/${ENDPOINTS.POKEMON}/${details.id}`,
+                    officialArtworkUrl: details.sprites.other['official-artwork'].front_default,
+                    frontDefaultUrl: details.sprites.front_default,
+                    types: typeNames,
+                };
+                dispatch({ type: 'FETCH_SUCCESS', payload: {
+                    results: [response],
+                    count: 1,
+                    next: null,
+                    previous: null,
+                }});
+                return null;
             }
         }
 
