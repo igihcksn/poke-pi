@@ -58,15 +58,15 @@ function pokemonReducer(state: PokemonState, action: PokemonAction): PokemonStat
         ),
       };
     case 'SET_LOCAL_SEARCH_TERM':
-      return { ...state, filterPokemonTypeValue: '', localSearchTerm: action.payload };
+      return { ...state, localSearchTerm: action.payload };
     case 'SET_SEARCH_TERM':
-      return { ...state, searchTerm: action.payload };
+      return { ...state, filterPokemonTypeValue: '', searchTerm: action.payload };
     case 'SET_OPEN_POKE_TYPE_MODAL':
       return { ...state, isPokeTypeModalOpen: action.payload };
     case 'SET_OPEN_POKE_GENERATION_MODAL':
       return { ...state, isPokeGenerationModalOpen: action.payload };
     case 'SET_FILTER_POKE_TYPE':
-      return { ...state, localSearchTerm: '', filterPokemonTypeValue: action.payload };
+      return { ...state, localSearchTerm: '', searchTerm: '', filterPokemonTypeValue: action.payload };
     default:
       return state;
   }
