@@ -44,11 +44,13 @@ export async function fetchPokemonData({
 
             
             if (response.ok && data.pokemon) {
-                const pokemonList = data.pokemon.map((item) => ({...item.pokemon}));
+                const pokemonList: Pokemon[] = data.pokemon.map((item: { pokemon: { name: string, url: string } }) => ({...item.pokemon}));
                 const paginatedPokemon = pokemonList.slice(offset, offset + limit);
                 dispatch({ type: 'FETCH_SUCCESS', payload: {
                     results: pokemonList,
-                    count: pokemonList.length
+                    count: pokemonList.length,
+                    next: null,
+                    previous: null,
                 }});
                 return paginatedPokemon;
             }
