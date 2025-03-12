@@ -52,6 +52,8 @@ Like the others framework we also able to deploy this APP privately with maximum
 
 We can use common tools like **Google Analytics** and **Vercel Analytics** to monitor our applications. If privacy is a concern, open-source options like **OpenTelemetry** and **Umami** are good alternatives.
 
+Other things we can do about monitor the APP is by logging with tools such as **Sentry** or **Rollbar** .
+
 ## Libraries
 
 
