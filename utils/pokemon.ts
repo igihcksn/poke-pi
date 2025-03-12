@@ -2,7 +2,13 @@ import { toaster } from "@/components/ui/toaster";
 import { ENDPOINTS } from "./constants";
 import { Pokemon, PokemonAction, PokemonDetailsAction } from "@/types/pokemon";
 
-export async function fetchPokemonData(limit: number, offset: number, dispatch: React.Dispatch<PokemonAction>, searchTerm: string) {
+export async function fetchPokemonData({
+    limit,
+    offset,
+    dispatch,
+    searchTerm,
+    filterPokemonTypeValue,
+}: { limit: number, offset: number, dispatch: React.Dispatch<PokemonAction>, searchTerm: string, filterPokemonTypeValue: string }) {
     dispatch({ type: 'FETCH_START' });
     try {
 
@@ -21,11 +27,12 @@ export async function fetchPokemonData(limit: number, offset: number, dispatch: 
             if (response.ok && data) {
                 dispatch({ type: 'FETCH_SUCCESS', payload: data });
                 return data.results;
-
             }
-        } else {
+        }
+
+        if (filterPokemonTypeValue) {
             const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/${ENDPOINTS.POKEMON}?offset=${offset}&limit=${limit}`
+                `${process.env.NEXT_PUBLIC_API_URL}/${ENDPOINTS.TYPE}/${filterPokemonTypeValue}`
             );
 
             if (!response.ok) {
@@ -35,11 +42,32 @@ export async function fetchPokemonData(limit: number, offset: number, dispatch: 
 
             const data = await response.json();
 
-            if (response.ok && data) {
-                dispatch({ type: 'FETCH_SUCCESS', payload: data });
-                return data.results;
-
+            
+            if (response.ok && data.pokemon) {
+                const pokemonList = data.pokemon.map((item) => ({...item.pokemon}));
+                const paginatedPokemon = pokemonList.slice(offset, offset + limit);
+                dispatch({ type: 'FETCH_SUCCESS', payload: {
+                    results: pokemonList,
+                    count: pokemonList.length
+                }});
+                return paginatedPokemon;
             }
+        }
+
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/${ENDPOINTS.POKEMON}?offset=${offset}&limit=${limit}`
+        );
+
+        if (!response.ok) {
+            dispatch({ type: 'FETCH_FAILURE' });
+            return null;
+        }
+
+        const data = await response.json();
+
+        if (response.ok && data) {
+            dispatch({ type: 'FETCH_SUCCESS', payload: data });
+            return data.results;
         }
     } catch (error) {
         toaster.create({

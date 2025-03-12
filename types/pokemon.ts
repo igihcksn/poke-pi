@@ -23,6 +23,7 @@ export interface PokemonState {
     localSearchTerm: string;
     isPokeTypeModalOpen: boolean;
     isPokeGenerationModalOpen: boolean;
+    filterPokemonTypeValue: string;
 };
 
 export type PokemonAction =
@@ -35,7 +36,8 @@ export type PokemonAction =
     | { type: 'SET_LOCAL_SEARCH_TERM'; payload: string }
     | { type: 'SET_SEARCH_TERM'; payload: string }
     | { type: 'SET_OPEN_POKE_TYPE_MODAL'; payload: boolean }
-    | { type: 'SET_OPEN_POKE_GENERATION_MODAL'; payload: boolean };
+    | { type: 'SET_OPEN_POKE_GENERATION_MODAL'; payload: boolean }
+    | { type: 'SET_FILTER_POKE_TYPE'; payload: string };
 
 // Pokemon detail pages
 export interface PokemonDetails {

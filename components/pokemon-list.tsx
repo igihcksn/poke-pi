@@ -12,14 +12,12 @@ export default function PokemonList(
     pokemonList,
     currentPage,
     totalCount,
-    totalPages,
     handlePageChange,
   }:
     {
       pokemonList: Pokemon[],
       currentPage: number,
       totalCount: number,
-      totalPages: number,
       handlePageChange: ({ page }: { page: number }) => void,
     }
 ) {
@@ -73,9 +71,10 @@ export default function PokemonList(
       <Stack alignItems="center">
         <PaginationRoot
           page={currentPage}
-          count={totalCount}
-          pageSize={totalPages}
+          count={totalCount - (21*2)}
+          pageSize={21}
           onPageChange={handlePageChange}
+          defaultPage={1}
         >
           <HStack>
             <PaginationPrevTrigger />

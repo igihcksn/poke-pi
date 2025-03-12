@@ -22,6 +22,7 @@ const initialState: PokemonState = {
   localSearchTerm: '',
   isPokeTypeModalOpen: false,
   isPokeGenerationModalOpen: false,
+  filterPokemonTypeValue: '',
 };
 
 function pokemonReducer(state: PokemonState, action: PokemonAction): PokemonState {
@@ -64,6 +65,8 @@ function pokemonReducer(state: PokemonState, action: PokemonAction): PokemonStat
       return { ...state, isPokeTypeModalOpen: action.payload };
     case 'SET_OPEN_POKE_GENERATION_MODAL':
       return { ...state, isPokeGenerationModalOpen: action.payload };
+    case 'SET_FILTER_POKE_TYPE':
+      return { ...state, filterPokemonTypeValue: action.payload };
     default:
       return state;
   }
@@ -80,20 +83,20 @@ export default function Home() {
     localSearchTerm,
     searchTerm,
     isPokeTypeModalOpen,
+    filterPokemonTypeValue,
   } = state;
 
   useEffect(() => {
     async function fetchData() {
       const offset = currentPage * limit;
-      const results = await fetchPokemonData(limit, offset, dispatch, searchTerm);
-
+      const results = await fetchPokemonData({limit, offset, dispatch, searchTerm, filterPokemonTypeValue});
       if (results) {
         await Promise.all(results.map((pokemon: Pokemon) => fetchPokemonDetailsAndDispatch(pokemon, dispatch)));
       }
     }
 
     fetchData();
-  }, [currentPage, limit, searchTerm]);
+  }, [currentPage, filterPokemonTypeValue, limit, searchTerm]);
 
   const handlePageChange = ({ page }: { page: number }) => {
     dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
@@ -103,8 +106,6 @@ export default function Home() {
     dispatch({ type: 'SET_SEARCH_TERM', payload: localSearchTerm });
     dispatch({ type: 'SET_CURRENT_PAGE', payload: 0 });
   };
-
-  const totalPages = Math.ceil(totalCount / limit);
 
   return (
     <>
@@ -139,7 +140,7 @@ export default function Home() {
                       <Drawer.Title>Please select pokemon type</Drawer.Title>
                     </Drawer.Header>
                     <Drawer.Body>
-                      <RadioGroup.Root>
+                      <RadioGroup.Root value={filterPokemonTypeValue} onValueChange={(e) => dispatch({ type: 'SET_FILTER_POKE_TYPE', payload: e.value })}>
                         <Stack gap="6">
                           {POKEMON_TYPE_LABEL.map((type) => (
                             <RadioGroup.Item key={`pokemon-type-${type.label}`} value={type.label}>
@@ -159,10 +160,6 @@ export default function Home() {
                         </Stack>
                       </RadioGroup.Root>
                     </Drawer.Body>
-                    <Drawer.Footer>
-                      <Button variant="outline" onClick={() => dispatch({ type: 'SET_OPEN_POKE_TYPE_MODAL', payload: false })}>Cancel</Button>
-                      <Button>Save</Button>
-                    </Drawer.Footer>
                     <Drawer.CloseTrigger asChild>
                       <CloseButton size="sm" />
                     </Drawer.CloseTrigger>
@@ -184,7 +181,6 @@ export default function Home() {
               pokemonList={pokemonList}
               currentPage={currentPage}
               totalCount={totalCount}
-              totalPages={totalPages}
               handlePageChange={handlePageChange} /> :
             <VStack colorPalette="teal" height={250} justifyContent="center" hidden={loading}>
               <Text color="yellow.500">Data not found</Text>

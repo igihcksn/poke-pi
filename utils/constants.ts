@@ -1,6 +1,7 @@
 export const ENDPOINTS = {
+    TYPE: 'type',
     POKEMON: 'pokemon',
-    POKEMON_GENERATION: 'generation'
+    POKEMON_GENERATION: 'generation',
 };
 
 export const POKEMON_TYPE = {
